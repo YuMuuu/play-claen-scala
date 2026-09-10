@@ -2,6 +2,7 @@ package dev.yumuuu.playclean.application.user
 
 import cats.effect.IO
 import cats.syntax.all.*
+import cats.syntax.either.*
 import dev.yumuuu.playclean.domain.user.UserRepository
 import dev.yumuuu.playclean.usecase.user.{UserApplicationError, UserGetListUseCase, UserView}
 import jakarta.inject.{Inject, Singleton}
@@ -12,6 +13,6 @@ class UserGetListInteractor @Inject() (
 ) extends UserGetListUseCase {
   override def handle(input: Unit): IO[Either[UserApplicationError, List[UserView]]] =
     repository.findAll.map(
-      _.leftMap(UserApplicationSupport.toApplicationError).map(_.map(UserApplicationSupport.toView))
+      _.bimap(UserApplicationSupport.toApplicationError, _.map(UserApplicationSupport.toView))
     )
 }

@@ -13,7 +13,7 @@ class UserGetDetailInteractor @Inject() (
   override def handle(id: String): IO[Either[UserApplicationError, UserView]] =
     (
       for {
-        maybeUser <- EitherT(repository.find(UserId.fromString(id)))
+        maybeUser <- EitherT(repository.find(UserId.from(id)))
           .leftMap(UserApplicationSupport.toApplicationError)
         user <- EitherT.fromOption[IO](maybeUser, UserApplicationError.NotFound(id))
       } yield UserApplicationSupport.toView(user)

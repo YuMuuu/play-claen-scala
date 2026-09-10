@@ -14,11 +14,11 @@ class UserAddInteractor @Inject() (
   override def handle(command: CreateUserCommand): IO[Either[UserApplicationError, UserView]] =
     (
       for {
-        validated <- EitherT.fromEither[IO](
+        (name, role) <- EitherT.fromEither[IO](
           UserApplicationSupport.validateUser(command.name, command.role)
         )
-        (name, role) = validated
-        id <- EitherT.liftF(IO.delay(UserId.fromString(UUID.randomUUID().toString)))
+        id <- EitherT.liftF(IO.delay(UserId.from(UUID.randomUUID().toString)))
+        //サンプルコードなのでInteractorでIDを生成しているが、実際はUUIDGenaratorを作成してInjectして利用する
         user = User.create(id, name, role)
         _ <- EitherT(repository.insert(user))
           .leftMap(UserApplicationSupport.toApplicationError)

@@ -81,7 +81,7 @@ class DoobieUserRepository @Inject() (transactor: Transactor[IO]) extends UserRe
     (
       UserName.fromString(row.name),
       UserRole.fromString(row.role)
-    ).mapN((name, role) => User.create(UserId.fromString(row.id), name, role))
+    ).mapN((name, role) => User.create(UserId.from(row.id), name, role))
       .leftMap(error => RepositoryError.InvalidStoredData(error.message))
 
   private def toRepositoryError(error: Throwable): RepositoryError =

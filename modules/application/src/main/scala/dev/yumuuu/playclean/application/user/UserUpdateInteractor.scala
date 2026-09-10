@@ -14,7 +14,7 @@ class UserUpdateInteractor @Inject() (
     (
       for {
         name <- EitherT.fromEither[IO](UserApplicationSupport.validateName(command.name))
-        maybeUser <- EitherT(repository.find(UserId.fromString(command.id)))
+        maybeUser <- EitherT(repository.find(UserId.from(command.id)))
           .leftMap(UserApplicationSupport.toApplicationError)
         user <- EitherT.fromOption[IO](maybeUser, UserApplicationError.NotFound(command.id))
         updatedUser = user.changeName(name)
