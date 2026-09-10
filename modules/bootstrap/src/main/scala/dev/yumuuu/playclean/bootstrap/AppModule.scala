@@ -1,6 +1,7 @@
 package dev.yumuuu.playclean.bootstrap
 
 import cats.effect.IO
+import com.typesafe.config.{Config, ConfigFactory}
 import com.zaxxer.hikari.HikariConfig
 import dev.yumuuu.playclean.application.auth.AuthenticatedUser
 import jakarta.enterprise.context.ApplicationScoped
@@ -15,6 +16,19 @@ import scala.concurrent.ExecutionContextExecutorService
 
 @ApplicationScoped
 class AppModule {
+  @Produces
+  @Singleton
+  def environment(): Environment =
+    Environment(
+      Option(Thread.currentThread().getContextClassLoader)
+        .getOrElse(classOf[AppModule].getClassLoader)
+    )
+
+  @Produces
+  @Singleton
+  def configuration(environment: Environment): Config =
+    ConfigFactory.load(environment.classLoader)
+
   @Produces
   @Singleton
   def appConfig(): AppConfig =
