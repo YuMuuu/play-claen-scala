@@ -1,11 +1,22 @@
 package dev.yumuuu.playclean.presentation.http
 
-import dev.yumuuu.playclean.application.auth.{AuthError, AuthenticatedUser, LoginCommand, MockAuthService}
+import dev.yumuuu.playclean.application.auth.{
+  AuthError,
+  AuthenticatedUser,
+  LoginCommand,
+  MockAuthService
+}
 import io.circe.{Decoder, Encoder, Json}
 import io.circe.parser.decode
 import io.circe.syntax.*
 import jakarta.inject.{Inject, Singleton}
-import org.apache.pekko.http.scaladsl.model.{ContentTypes, HttpEntity, HttpResponse, StatusCode, StatusCodes}
+import org.apache.pekko.http.scaladsl.model.{
+  ContentTypes,
+  HttpEntity,
+  HttpResponse,
+  StatusCode,
+  StatusCodes
+}
 import org.apache.pekko.http.scaladsl.server.{Directives, Route}
 
 @Singleton
@@ -54,8 +65,8 @@ class ApiRoutes @Inject() (
           post {
             authenticated { (token, _) =>
               auth.logout(token) match {
-                case Right(())    => complete(HttpResponse(StatusCodes.NoContent))
-                case Left(error)  => complete(authErrorResponse(error))
+                case Right(())   => complete(HttpResponse(StatusCodes.NoContent))
+                case Left(error) => complete(authErrorResponse(error))
               }
             }
           }
@@ -98,7 +109,7 @@ class ApiRoutes @Inject() (
     entity(as[String]) { body =>
       decode[A](body) match {
         case Right(request) => onSuccess(request)
-        case Left(_) =>
+        case Left(_)        =>
           complete(
             errorResponse(StatusCodes.BadRequest, "invalid_json", List("invalid JSON request body"))
           )

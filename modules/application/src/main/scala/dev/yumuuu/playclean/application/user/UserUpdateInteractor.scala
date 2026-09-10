@@ -3,7 +3,12 @@ package dev.yumuuu.playclean.application.user
 import cats.effect.IO
 import cats.data.EitherT
 import dev.yumuuu.playclean.domain.user.{UserId, UserRepository}
-import dev.yumuuu.playclean.usecase.user.{UpdateUserCommand, UserApplicationError, UserUpdateUseCase, UserView}
+import dev.yumuuu.playclean.usecase.user.{
+  UpdateUserCommand,
+  UserApplicationError,
+  UserUpdateUseCase,
+  UserView
+}
 import jakarta.inject.{Inject, Singleton}
 
 @Singleton

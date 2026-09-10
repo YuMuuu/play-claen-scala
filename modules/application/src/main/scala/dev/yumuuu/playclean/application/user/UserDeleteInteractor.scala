@@ -10,9 +10,8 @@ import jakarta.inject.{Inject, Singleton}
 class UserDeleteInteractor @Inject() (
     repository: UserRepository
 ) extends UserDeleteUseCase {
-  override def handle(id: String): IO[Either[UserApplicationError, Unit]] = {
+  override def handle(id: String): IO[Either[UserApplicationError, Unit]] =
     repository
       .delete(UserId.from(id))
       .map(_.bimap(UserApplicationSupport.toApplicationError, _ => ()))
-  }
 }

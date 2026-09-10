@@ -8,8 +8,7 @@ object UserName {
 
   def fromString(value: String): Either[UserValidationError, UserName] =
     if value.length < MinLength then Left(UserValidationError.NameTooShort(MinLength))
-    else if value.length > MaxLength then
-      Left(UserValidationError.NameTooLong(MaxLength))
+    else if value.length > MaxLength then Left(UserValidationError.NameTooLong(MaxLength))
     else Right(value)
 
   extension (userName: UserName) {

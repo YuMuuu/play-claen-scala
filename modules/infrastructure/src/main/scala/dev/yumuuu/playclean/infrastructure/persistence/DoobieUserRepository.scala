@@ -3,7 +3,14 @@ package dev.yumuuu.playclean.infrastructure.persistence
 import cats.data.EitherT
 import cats.effect.IO
 import cats.syntax.all.*
-import dev.yumuuu.playclean.domain.user.{RepositoryError, User, UserId, UserName, UserRepository, UserRole}
+import dev.yumuuu.playclean.domain.user.{
+  RepositoryError,
+  User,
+  UserId,
+  UserName,
+  UserRepository,
+  UserRole
+}
 import jakarta.inject.{Inject, Singleton}
 import java.sql.SQLException
 import org.typelevel.doobie.{ConnectionIO, Transactor}

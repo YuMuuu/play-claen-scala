@@ -10,7 +10,7 @@ object UserRole {
     value.trim.toUpperCase match {
       case "ADMIN"  => Right(UserRole.Admin)
       case "MEMBER" => Right(UserRole.Member)
-      case _         => Left(UserValidationError.InvalidRole(value))
+      case _        => Left(UserValidationError.InvalidRole(value))
     }
 
   extension (role: UserRole) {

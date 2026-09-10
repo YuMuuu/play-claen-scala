@@ -21,7 +21,7 @@ private[http] trait UserControllerSupport extends Directives {
     entity(as[String]) { body =>
       decode[A](body) match {
         case Right(request) => onSuccess(request)
-        case Left(_) =>
+        case Left(_)        =>
           complete(
             errorResponse(StatusCodes.BadRequest, "invalid_json", List("invalid JSON request body"))
           )
@@ -48,8 +48,10 @@ private[http] trait UserControllerSupport extends Directives {
         errorResponse(StatusCodes.ServiceUnavailable, "repository_unavailable", Nil)
     }
 
-  protected def jsonResponse(status: org.apache.pekko.http.scaladsl.model.StatusCode, json: Json)
-      : HttpResponse =
+  protected def jsonResponse(
+      status: org.apache.pekko.http.scaladsl.model.StatusCode,
+      json: Json
+  ): HttpResponse =
     HttpResponse(status, entity = HttpEntity(ContentTypes.`application/json`, json.noSpaces))
 
   private def errorResponse(

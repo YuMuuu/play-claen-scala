@@ -23,7 +23,7 @@ private[user] object UserApplicationSupport {
 
   def toApplicationError(error: RepositoryError): UserApplicationError =
     error match {
-      case RepositoryError.Conflict            => UserApplicationError.Conflict
+      case RepositoryError.Conflict             => UserApplicationError.Conflict
       case RepositoryError.InvalidStoredData(_) => UserApplicationError.RepositoryUnavailable
       case RepositoryError.Unavailable(_)       => UserApplicationError.RepositoryUnavailable
     }
