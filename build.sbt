@@ -107,6 +107,7 @@ lazy val bootstrap = project
       "com.github.pureconfig" %% "pureconfig-generic-scala3" % pureConfigVersion,
       "jakarta.annotation" % "jakarta.annotation-api" % "3.0.0",
       "jakarta.enterprise" % "jakarta.enterprise.cdi-api" % "4.1.0",
+      "org.typelevel" %% "doobie-hikari" % doobieVersion,
       "org.jboss.weld.se" % "weld-se-core" % weldVersion
     )
   )

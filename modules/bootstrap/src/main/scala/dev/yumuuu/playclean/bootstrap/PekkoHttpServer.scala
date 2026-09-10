@@ -5,7 +5,7 @@ import jakarta.annotation.{PostConstruct, PreDestroy}
 import jakarta.inject.{Inject, Singleton}
 import org.apache.pekko.actor.typed.ActorSystem
 import org.apache.pekko.http.scaladsl.Http.ServerBinding
-import org.apache.pekko.http.scaladsl.HttpExt
+import org.apache.pekko.http.scaladsl.Http
 
 import scala.concurrent.Await
 import scala.concurrent.duration.*
@@ -14,23 +14,25 @@ import scala.concurrent.duration.*
 class PekkoHttpServer @Inject() (
     config: AppConfig,
     routes: ApiRoutes,
-    http: HttpExt
-)(using ActorSystem[Nothing]) {
-  private var binding: Option[ServerBinding] = None
+    actorSystem: ActorSystem[Nothing]
+) {
+  given ActorSystem[Nothing] = actorSystem
+
+  lazy val serverBinding: ServerBinding =
+    Await.result(
+      Http().newServerAt(config.server.host, config.server.port).bind(routes.route),
+      30.seconds
+    )
 
   @PostConstruct
   def start(): Unit =
-    binding = Some(
-      Await.result(
-        http.newServerAt(config.server.host, config.server.port).bind(routes.route),
-        30.seconds
-      )
-    )
+    val _ = serverBinding
 
   @PreDestroy
-  def stop(): Unit =
-    binding.foreach { serverBinding =>
-      val _ =
-        Await.result(serverBinding.terminate(config.server.gracefulShutdownTimeout), 15.seconds)
-    }
+  def stop(): Unit = {
+    val _ = Await.result(
+      serverBinding.terminate(config.server.gracefulShutdownTimeout),
+      15.seconds
+    )
+  }
 }
