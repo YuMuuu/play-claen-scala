@@ -7,12 +7,10 @@ import jakarta.inject.{Inject, Singleton}
 import org.typelevel.doobie.Transactor
 import org.typelevel.doobie.hikari.HikariTransactor
 
-import scala.concurrent.ExecutionContextExecutorService
-
 @Singleton
 class ManagedTransactor @Inject() (
     hikariConfig: HikariConfig,
-    connectExecutionContext: ExecutionContextExecutorService
+    connectExecutionContext: DatabaseExecutionContext
 ) {
   private lazy val dataSource = new HikariDataSource(hikariConfig)
 

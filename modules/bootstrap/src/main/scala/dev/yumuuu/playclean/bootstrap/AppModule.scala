@@ -12,8 +12,6 @@ import org.apache.pekko.http.scaladsl.Http.ServerBinding
 import org.typelevel.doobie.Transactor
 import pureconfig.ConfigSource
 
-import scala.concurrent.ExecutionContextExecutorService
-
 @ApplicationScoped
 class AppModule {
   @Produces
@@ -50,13 +48,6 @@ class AppModule {
   @Singleton
   def transactor(managedTransactor: ManagedTransactor): Transactor[IO] =
     managedTransactor.transactor
-
-  @Produces
-  @Singleton
-  def executionContextExecutorService(
-      managedExecutionContext: DoobieTransactorExecutionContextExecutorService
-  ): ExecutionContextExecutorService =
-    managedExecutionContext.executionContextExecutorService
 
   @Produces
   @Singleton
