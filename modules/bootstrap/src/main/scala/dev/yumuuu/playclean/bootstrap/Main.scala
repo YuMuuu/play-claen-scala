@@ -28,6 +28,9 @@ object Main {
     val container = weld.initialize()
     val _ = container.select(classOf[ServerBinding]).get()
 
+    /*
+    ctrl+cでシャットダウンできるための処理
+     */
     val shutdownStarted = new AtomicBoolean(false)
     def shutdown(): Unit =
       if shutdownStarted.compareAndSet(false, true) then container.shutdown()
