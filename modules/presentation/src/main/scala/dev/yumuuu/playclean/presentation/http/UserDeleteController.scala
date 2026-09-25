@@ -1,0 +1,20 @@
+package dev.yumuuu.playclean.presentation.http
+
+import dev.yumuuu.playclean.usecase.user.UserDeleteUseCase
+import jakarta.inject.{Inject, Singleton}
+import org.apache.pekko.http.scaladsl.model.{HttpResponse, StatusCodes}
+import org.apache.pekko.http.scaladsl.server.Route
+
+@Singleton
+class UserDeleteController @Inject() (
+    useCase: UserDeleteUseCase,
+    protected val effectRunner: EffectRunner
+) extends UserControllerSupport {
+  def route(id: String): Route =
+    delete {
+      completeEffect(useCase.handle(id)) {
+        case Right(())   => HttpResponse(StatusCodes.NoContent)
+        case Left(error) => userErrorResponse(error)
+      }
+    }
+}
